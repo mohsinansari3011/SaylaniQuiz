@@ -7,7 +7,7 @@ class signup extends Component {
 constructor(props){
 
     super();
-    console.log(props);
+    //console.log(props);
     this.state = {
         user: '',
         email: '',

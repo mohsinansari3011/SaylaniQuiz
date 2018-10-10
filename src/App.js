@@ -4,6 +4,7 @@ import './App.css';
 import Login from './screens/login/';
 import Signup from './screens/signup/';
 import Categories from './screens/categories';
+import swal from 'sweetalert';
 
 class App extends Component {
 
@@ -25,7 +26,7 @@ constructor(props){
   };
 
 
-
+  this.QuizLogin = this.QuizLogin.bind(this);
   this.QuizSignup = this.QuizSignup.bind(this);
   this.loginCheck = this.loginCheck.bind(this);
   this.showSignup = this.showSignup.bind(this);
@@ -39,7 +40,7 @@ constructor(props){
 
 
 loginCheck(){
-  const { islogin, issignup, isquiz } = this.state;
+  //const { islogin, issignup, isquiz } = this.state;
   const username = localStorage.getItem("user");
   if (username != null) {
  
@@ -62,7 +63,7 @@ loginCheck(){
 
   QuizSignup(user, email, pass){
 
-    const { islogin, issignup, isquiz}= this.state;
+    //const { islogin, issignup, isquiz}= this.state;
 
     localStorage.setItem("user", user);
     localStorage.setItem("email", email);
@@ -74,30 +75,59 @@ loginCheck(){
       islogin: true,
       isquiz: true,
     })
+
+    swal("Good Job", "Signup Successfully", "success");
 }
+
+
+  QuizLogin(email, pass) {
+
+    //const { islogin, issignup, isquiz}= this.state;
+    const getEmail = localStorage.getItem("email");
+    const getpassword = localStorage.getItem("password");
+
+    if (getEmail === email && getpassword === pass) {
+      this.setState({
+
+        issignup: false,
+        islogin: true,
+        isquiz: true,
+      })
+
+      swal("Good Job", "Login Successfully", "success");
+    }else {
+      swal("Bad Job", "Login Failed! Signup if dont have account", "error");
+    }
+    
+
+    
+  }
 
 showLogin(){
-  const { islogin, issignup, isquiz } = this.state;
-  this.setState({
-
-    issignup: false,
-    islogin: true,
-    isquiz: false,
-  })
-
-  console.log("showLogin");
-}
-showSignup(){
-  const { islogin, issignup, isquiz } = this.state;
+  //const { islogin, issignup, isquiz } = this.state;
 
   this.setState({
 
     issignup: true,
     islogin: false,
     isquiz: false,
+    
   })
 
-  console.log("showSignup");
+  //console.log("showLogin", issignup, islogin, isquiz);
+}
+showSignup(){
+  //const { islogin, issignup, isquiz } = this.state;
+
+  this.setState({
+
+
+    issignup: false,
+    islogin: true,
+    isquiz: false,
+  })
+
+  //console.log("showSignup", islogin, issignup, isquiz);
 }
 
   render() {
@@ -110,7 +140,7 @@ showSignup(){
           <img src={logo} className="App-logo" alt="logo" />
         </header>
 
-          {islogin && !issignup && !isquiz && <Login onshowLogin={this.showLogin}  />}
+        {islogin && !issignup && !isquiz && <Login onshowLogin={this.showLogin} onLogin={this.QuizLogin} />}
           {!islogin && issignup && !isquiz && <Signup onshowSignup={this.showSignup} onSignup={this.QuizSignup} />}
           {!issignup && islogin && isquiz && <Categories list={quizez} />}
         

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import swal from 'sweetalert';
 
 
 
@@ -13,10 +13,16 @@ super();
     this.state = {
         iscategories : true,
         issubcategories : false,
+        isProctoringKey: false,
         category : '',
     }
 
     //this.SelectCategory = this.SelectCategory.bind(this);
+    this.backtoCategories = this.backtoCategories.bind(this);
+    this.ProctoringKey = this.ProctoringKey.bind(this);
+    this.handleProctoringKey = this.handleProctoringKey.bind(this);
+    this.SubmitProctoringKey = this.SubmitProctoringKey.bind(this);
+    this.onLogout = this.onLogout.bind(this);
 }
 
 
@@ -28,10 +34,22 @@ super();
         //const { category } = this.state;
         
         const getCat = localStorage.getItem("categories");
+        const getProctoring = localStorage.getItem("Proctoring");
         //const list = localStorage.getItem("list");
 
-        if (getCat != null) {
+        if (getCat != null && getProctoring != null) {
             
+            this.setState({
+                category: getCat,
+                iscategories: false,
+                issubcategories: false,
+                isProctoringKey : false
+            })
+
+            //this.showSubCategories();
+        }
+        if (getCat != null && getProctoring == null) {
+
             this.setState({
                 category: getCat,
                 iscategories: false,
@@ -40,6 +58,8 @@ super();
 
             //this.showSubCategories();
         }
+
+
     }
 
 
@@ -58,6 +78,84 @@ SelectCategory(index){
 
 
 }
+
+backtoCategories(){
+
+    const { category } = this.state;
+
+    console.log("backtoCategories");
+    localStorage.removeItem("categories");
+    
+    this.setState({
+        category : '',
+        iscategories: true,
+        issubcategories: false,
+    })
+}
+
+
+    onLogout() {
+
+        //const { category } = this.state;
+
+        console.log("onLogout");
+        localStorage.removeItem("Proctoring");
+        localStorage.removeItem("categories");
+        //localStorage.removeItem("email");
+        localStorage.removeItem("list");
+        localStorage.setItem("login","logout");
+        //localStorage.removeItem("password");
+        //localStorage.removeItem("user");
+
+        this.setState({
+            category: '',
+            iscategories: true,
+            issubcategories: false,
+            isProctoringKey : false,
+        })
+
+        this.props.onLogout();
+    }
+
+
+    ProctoringKey() {
+       
+
+        this.setState({
+            iscategories: false,
+            issubcategories: false,
+            isProctoringKey: true,
+        })
+    }
+
+
+
+
+    SubmitProctoringKey() {
+
+        const { Proctoring } = this.state;
+
+
+        if (Proctoring == "3011") {
+
+            localStorage.setItem("Proctoring", Proctoring);
+
+            this.setState({
+                iscategories: false,
+                issubcategories: false,
+                isProctoringKey: false,
+            })
+            
+            this.props.OnproctoringSuccess();
+
+            swal("Good Job!", "you can start your quiz now!!", "success");
+
+        }else{
+            swal("Bad Job!", "Invalid Proctoring Key!! try 3011 as Proctoring key!!", "error");
+        }
+        
+    }
+
 
 showCategories(){
 
@@ -81,6 +179,9 @@ showCategories(){
     );
 }
 
+
+
+
     showSubCategories() {
 
         const { list } = this.props;
@@ -101,23 +202,62 @@ showCategories(){
                         })
                     }
                 </ul>
-
-                <button>Start Quiz</button>
+                <button onClick={this.backtoCategories}>Back</button> <br/>
+                <button onClick={this.ProctoringKey}>Start Quiz</button>
             </div>
 
         );
     }
 
+
+
+    showProctoringKey() {
+
+        return (
+            <div className="container">
+                <h1>this is Proctoring Key</h1>
+                <input type="password" onChange={this.handleProctoringKey} placeholder="Proctoring Key"/><br/>
+                <button onClick={this.SubmitProctoringKey}>Submit Key</button>
+            </div>
+
+        );
+    }
+
+
+    handleProctoringKey(e) {
+        const Proctoring = e.target.value;
+        this.setState({ Proctoring: Proctoring });
+
+    }
+
+    successProctoringKey(){
+
+        // function will redirect to questions components
+        this.props.OnproctoringSuccess();
+
+        return (
+            <div className="container">
+                <h1>Proctoring Success!! <br/>you will be now redirected</h1>
+            </div>
+
+        );
+
+        
+    }
+
 render(){
 
-    const { iscategories, issubcategories } = this.state;
+    const { iscategories, issubcategories, isProctoringKey } = this.state;
 
     return (
 
         <div>
-            {iscategories && !issubcategories && this.showCategories()}
-            {!iscategories && issubcategories && this.showSubCategories()}
-           
+            {<button onClick={this.onLogout}>Logout</button>}
+            {iscategories && !issubcategories && !isProctoringKey && this.showCategories()}
+            {!iscategories && issubcategories && !isProctoringKey && this.showSubCategories()}
+            {!iscategories && !issubcategories && isProctoringKey && this.showProctoringKey()}
+            {!iscategories && !issubcategories && !isProctoringKey && this.successProctoringKey()}
+            
         </div>
     );
 

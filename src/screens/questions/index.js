@@ -9,6 +9,8 @@ class questions extends Component {
     
         this.state = {
             selectedq : 0,
+            score: 0,
+            isnext:true,
             time: 0,
             isOn: false,
             start: 0,
@@ -19,28 +21,36 @@ class questions extends Component {
                             name: 'quiz 1',
                             password: '123456',
                             questions: [{
-                                question: '0 What is Two Way Binding?',
+                                question: '1 What is Two Way Binding?',
                                 options: [
-                                    { name: 'option 1' },
-                                    { name: 'option 2', correct: true },
-                                    { name: 'option 3' },
-                                    { name: 'option 4' }
+                                    { name: 'option 1', correct: false },
+                                    { name: 'option 2', correct: false },
+                                    { name: 'option 3', correct: false },
+                                    { name: 'option 4', correct: true }
                                 ]
                             }, {
-                                question: '1 What is Lifecycle Digestion?',
+                                question: '2 What is Lifecycle Digestion?',
                                 options: [
-                                    { name: 'option 1' },
-                                    { name: 'option 2' },
-                                    { name: 'option 3', correct: true },
-                                    { name: 'option 4' }
+                                    { name: 'option 1', correct: true},
+                                    { name: 'option 2', correct: false},
+                                    { name: 'option 3', correct: false },
+                                    { name: 'option 4', correct: false}
                                 ]
                                 }, {
-                                    question: '2 What is Binding Digestion?',
+                                    question: '3 What is Binding Digestion?',
                                     options: [
-                                        { name: 'option 1' },
-                                        { name: 'option 2' },
+                                        { name: 'option 1', correct: false },
+                                        { name: 'option 2', correct: true },
+                                        { name: 'option 3', correct: false },
+                                        { name: 'option 4', correct: false }
+                                    ]
+                                }, {
+                                    question: '4 What is Binding Digestion?',
+                                    options: [
+                                        { name: 'option 1', correct: false },
+                                        { name: 'option 2', correct: false },
                                         { name: 'option 3', correct: true },
-                                        { name: 'option 4' }
+                                        { name: 'option 4', correct: false }
                                     ]
                                 }]
                         }
@@ -55,6 +65,7 @@ class questions extends Component {
 
 
         this.Nextquestion = this.Nextquestion.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
     
     
@@ -68,10 +79,18 @@ class questions extends Component {
 
     Nextquestion(){
         const { selectedq} = this.state;
+        var totalq = localStorage.getItem("totalq");
+        if (totalq != null) {
 
-        this.setState({
-            selectedq: selectedq + 1,
-        })
+            this.setState({
+                    selectedq: selectedq + 1,
+                })
+                if (totalq - selectedq === 2) {
+                    this.setState({
+                        isnext: false,
+                    })
+                }
+        }
     }
 
     startTimer() {
@@ -85,11 +104,24 @@ class questions extends Component {
         }), 1000);
     }
 
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        const opt = target.op;
+        console.log("value", value);
+        console.log("opt", opt);
+        // this.setState({
+        //     [name]: value
+        // });
+    }
+
 render(){
     //const { list } = this.props;
-    const { quizlist, selectedq } = this.state;
+    const { quizlist, selectedq, isnext } = this.state;
     const category = localStorage.getItem("categories");
-    console.log("return");
+    //console.log("return");
     return(
        
     <div>
@@ -97,41 +129,35 @@ render(){
             <h1>this is questions Component</h1>
 
             <div>
-                <table border="1">
+                
                 {quizlist.map((value) => {
-                    if (value.category == category) {
+                    if (value.category === category) {
                         //console.log(value.quizzes[0].questions.length);
-                        
-                           
-                            return <tr >
-                                <td> Question <br/> {value.quizzes[0].questions[selectedq].question}</td>
-                                <td>
+ 
+                        return <div >
+                                <div> Question No <br /> {value.quizzes[0].questions[selectedq].question}</div>
+                                <div>
+                                {localStorage.setItem("totalq", value.quizzes[0].questions.length)}
                                 {value.quizzes[0].questions[selectedq].options.map((optionss) => {
                                     return (
-                                        <td>
-                                            <input type="checkbox" id={optionss.name} value={optionss.name} />
+                                        <div>
+                                            <input type="radio" checked="false" onChange={this.handleInputChange} name="quizopt" op={String(optionss.correct)} />
                                             <label for={optionss.name}>{optionss.name}</label>
-                                        </td>
+                                        </div>
                                     );
                                 })}
-                                </td>
-                            </tr>
-                            
-                        
-                        //return <div>{value.quizzes[0].questions[0].question}</div>
-
-                        
-                       
-                        //return <div>{JSON.stringify(value.quizzes)}</div>
-
-                       
+                                </div>
+                            </div>
                     }
                    
                 })
 
-                }
-                    <tr><td> <button onClick={this.Nextquestion}>Next</button></td></tr>
-                </table>
+                            }
+                   
+                        {isnext && <button onClick={this.Nextquestion}>Next</button>}
+                        {!isnext && <button >Finish</button>}
+                        
+                        
                
             </div>
             

@@ -56,8 +56,88 @@ class questions extends Component {
                         }
                         , { name: 'quiz 2', password: '123456' }]
                 },
-                { category: '1', quizzes: [{ name: 'quiz JSX 1', password: '123456' }, { name: 'quiz RJX 2', password: '123456' }] },
-                { category: '2', quizzes: [{ name: 'quiz Vue 1', password: '123456' }, { name: 'quiz Vue 2', password: '123456' }] }
+                {
+                    category: '1', quizzes: [
+                        {
+                            name: 'quiz 1',
+                            password: '123456',
+                            questions: [{
+                                question: '1 What is Two Way Binding?',
+                                options: [
+                                    { name: 'option 1', correct: false },
+                                    { name: 'option 2', correct: false },
+                                    { name: 'option 3', correct: false },
+                                    { name: 'option 4', correct: true }
+                                ]
+                            }, {
+                                question: '2 What is Lifecycle Digestion?',
+                                options: [
+                                    { name: 'option 1', correct: true },
+                                    { name: 'option 2', correct: false },
+                                    { name: 'option 3', correct: false },
+                                    { name: 'option 4', correct: false }
+                                ]
+                            }, {
+                                question: '3 What is Binding Digestion?',
+                                options: [
+                                    { name: 'option 1', correct: false },
+                                    { name: 'option 2', correct: true },
+                                    { name: 'option 3', correct: false },
+                                    { name: 'option 4', correct: false }
+                                ]
+                            }, {
+                                question: '4 What is Binding Digestion?',
+                                options: [
+                                    { name: 'option 1', correct: false },
+                                    { name: 'option 2', correct: false },
+                                    { name: 'option 3', correct: true },
+                                    { name: 'option 4', correct: false }
+                                ]
+                            }]
+                        }
+                        , { name: 'quiz 2', password: '123456' }]
+                },
+                {
+                    category: '2', quizzes: [
+                        {
+                            name: 'quiz 1',
+                            password: '123456',
+                            questions: [{
+                                question: '1 What is Two Way Binding?',
+                                options: [
+                                    { name: 'option 1', correct: false },
+                                    { name: 'option 2', correct: false },
+                                    { name: 'option 3', correct: false },
+                                    { name: 'option 4', correct: true }
+                                ]
+                            }, {
+                                question: '2 What is Lifecycle Digestion?',
+                                options: [
+                                    { name: 'option 1', correct: true },
+                                    { name: 'option 2', correct: false },
+                                    { name: 'option 3', correct: false },
+                                    { name: 'option 4', correct: false }
+                                ]
+                            }, {
+                                question: '3 What is Binding Digestion?',
+                                options: [
+                                    { name: 'option 1', correct: false },
+                                    { name: 'option 2', correct: true },
+                                    { name: 'option 3', correct: false },
+                                    { name: 'option 4', correct: false }
+                                ]
+                            }, {
+                                question: '4 What is Binding Digestion?',
+                                options: [
+                                    { name: 'option 1', correct: false },
+                                    { name: 'option 2', correct: false },
+                                    { name: 'option 3', correct: true },
+                                    { name: 'option 4', correct: false }
+                                ]
+                            }]
+                        }
+                        , { name: 'quiz 2', password: '123456' }]
+                }
             ]
         }
     
